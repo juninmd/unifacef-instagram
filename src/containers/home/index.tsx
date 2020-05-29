@@ -1,8 +1,9 @@
-import { Avatar, Card, Divider, Layout, Text } from '@ui-kitten/components';
+import { Avatar, Button, Card, Divider, Layout, Text } from '@ui-kitten/components';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, } from 'react';
 import { inject, observer } from 'mobx-react';
 
+import { CameraApp } from '../../components/camera.component';
 import HomeStore from '../../stores/home.store';
 
 interface Props {
@@ -21,12 +22,22 @@ export default class Home extends Component<Props> {
 
   render() {
 
-    const { posts } = this.props.homeStore;
+    const { posts, photoReady, toogleStatus } = this.props.homeStore;
+
+    const uploadPhoto = (uri: string) => {
+      const { addPost } = this.props.homeStore;
+      addPost(uri);
+      toogleStatus(false);
+    }
 
     return (
       <Layout style={{ flex: 1 }}>
         <ScrollView>
-          {posts.map((post, index) => (
+          <CameraApp status={photoReady} onTakeCamera={(uri) => uploadPhoto(uri)} />
+
+          {photoReady == false && <Button onPress={() => toogleStatus(true)}>Postar</Button>}
+
+          {photoReady == false && posts.map((post, index) => (
             <Card key={index} style={styles.card}>
               <View style={styles.header}>
                 <Avatar

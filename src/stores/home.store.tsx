@@ -15,6 +15,9 @@ type Post = {
 }
 
 export default class HomeStore {
+
+  @observable photoReady: boolean = false;
+
   @observable posts: Post[] = [];
 
   @action getPosts = async () => {
@@ -26,6 +29,27 @@ export default class HomeStore {
       this.posts = [];
     }
   }
+
+  @action addPost = (uriPhoto) => {
+    const post: Post = {
+      author: {
+        avatar: 'https://i1.wp.com/www.jornadageek.com.br/wp-content/uploads/2016/10/Batman-not2.jpg?resize=696%2C398&ssl=1',
+        id: 2,
+        name: 'batman'
+      },
+      authorId: 2,
+      description: 'minha foto',
+      id: this.posts.length + 1,
+      image: uriPhoto
+    };
+
+    this.posts.push(post);
+  }
+
+  @action toogleStatus = (status: boolean) => {
+    this.photoReady = status;
+  }
+
 }
 
 const homeStore = new HomeStore();
