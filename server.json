@@ -1,0 +1,41 @@
+{
+  "feed": [
+    {
+      "id": 1,
+      "image": "https://i.pinimg.com/originals/26/ea/fc/26eafc0b14488fea03fa8fa9751203ff.jpg",
+      "description": "Are you working for your dreams?",
+      "authorId": 1
+    },
+    {
+      "id": 1,
+      "image": "https://i.pinimg.com/originals/26/ea/fc/26eafc0b14488fea03fa8fa9751203ff.jpg",
+      "description": "Are you working for your dreams?",
+      "authorId": 1
+    },
+    {
+      "id": 1,
+      "image": "https://i.pinimg.com/originals/26/ea/fc/26eafc0b14488fea03fa8fa9751203ff.jpg",
+      "description": "Are you working for your dreams?",
+      "authorId": 1
+    },
+    {
+      "id": 1,
+      "image": "https://i.pinimg.com/originals/26/ea/fc/26eafc0b14488fea03fa8fa9751203ff.jpg",
+      "description": "Are you working for your dreams?",
+      "authorId": 1
+    },
+    {
+      "id": 1,
+      "image": "https://i.pinimg.com/originals/26/ea/fc/26eafc0b14488fea03fa8fa9751203ff.jpg",
+      "description": "Are you working for your dreams?",
+      "authorId": 1
+    }
+  ],
+  "authors": [
+    {
+      "id": 1,
+      "name": "jr_acn",
+      "avatar": "https://avatars0.githubusercontent.com/u/6952134?s=50"
+    }
+  ]
+}
