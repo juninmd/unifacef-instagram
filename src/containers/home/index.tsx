@@ -46,10 +46,6 @@ export default class Home extends Component<Props> {
                   style={styles.avatar} />
                 <Text style={styles.title}>{post.author.name}</Text>
               </View>
-              <Image
-                source={{
-                  uri: 'https://reactnative.dev/img/tiny_logo.png',
-                }} />
               <Image style={styles.picture} source={{ uri: post.image }} />
               <Divider />
               <View style={styles.footer}>
