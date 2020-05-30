@@ -15,7 +15,11 @@ interface Props {
 @observer
 export default class Home extends Component<Props> {
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getPosts()
+  }
+
+  async getPosts() {
     const { getPosts } = this.props.homeStore;
     try {
       await getPosts();
@@ -25,13 +29,12 @@ export default class Home extends Component<Props> {
         "Erro",
         error.message
       );
-      console.log(error);
     }
   }
 
   render() {
 
-    const { posts, photoReady, toogleStatus, addPost, loading, getPosts } = this.props.homeStore;
+    const { posts, photoReady, toogleStatus, addPost, loading } = this.props.homeStore;
 
     const uploadPhoto = (uri?: string) => {
       if (uri) {
@@ -55,7 +58,7 @@ export default class Home extends Component<Props> {
       <Layout style={{ flex: 1 }}>
         <ScrollView
           refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={() => getPosts()} />
+            <RefreshControl refreshing={loading} onRefresh={() => this.getPosts()} />
           }>
           <Camera status={photoReady} onTakeCamera={(uri) => uploadPhoto(uri)} />
           {photoReady === false && <Button onPress={() => toogleStatus(true)}>Postar</Button>}
