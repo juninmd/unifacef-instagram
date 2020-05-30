@@ -1,72 +1,71 @@
+import { RNCamera, TakePictureOptions } from 'react-native-camera';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { RNCamera } from 'react-native-camera';
-
 interface Props {
-  onTakeCamera: (uri: string) => void
+  onTakeCamera: (uri?: string) => void
   status: boolean
 }
 
-export class CameraApp extends Component<Props> {
+export class Camera extends Component<Props> {
+
   render() {
+
     const PendingView = () => (
-      <View
-        style={{
-          backgroundColor: 'lightgreen',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text>Carregando</Text>
-      </View>
+      <View style={styles.pendingView}><Text>Carregando..</Text></View>
     );
 
+    const { status } = this.props;
 
-    const status = this.props.status;
-
-    return (
-      <View>
-        {status &&
-          <View style={styles.container}>
-            <RNCamera
-              captureAudio={false}
-              style={styles.preview}
-              type={RNCamera.Constants.Type.back}
-              androidCameraPermissionOptions={{
-                title: 'Permission to use camera',
-                message: 'We need your permission to use your camera',
-                buttonPositive: 'Ok',
-                buttonNegative: 'Cancel',
-              }}
-            >
-              {({ camera, status, recordAudioPermissionStatus }) => {
-                if (status !== 'READY') return <PendingView />;
-                return (
-                  <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity onPress={() => this.takePicture(camera)} style={styles.capture}>
-                      <Text style={{ fontSize: 14 }}>Fotografar</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-            </RNCamera>
-
-          </View>}
-      </View>
-    );
+    return (<View>
+      {status &&
+        <View style={styles.container}>
+          <RNCamera
+            captureAudio={false}
+            style={styles.preview}
+            type={RNCamera.Constants.Type.back}
+            androidCameraPermissionOptions={{
+              title: 'Permissão para usar camera',
+              message: 'Precisamos da sua persmissão para fotografar',
+              buttonPositive: 'OK!',
+              buttonNegative: 'Cancel'
+            }}>
+            {({ camera, status }) => {
+              if (status !== 'READY') return <PendingView />
+              return (
+                <View>
+                  <TouchableOpacity onPress={() => this.cancel()} style={styles.capture}>
+                    <Text style={styles.titlePhoto}>Cancelar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.takePicture(camera)} style={styles.capture}>
+                    <Text style={styles.titlePhoto}>Fotografar</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+          </RNCamera>
+        </View>}
+    </View>)
   }
 
-  takePicture = async (camera) => {
+  cancel = () => {
     const { onTakeCamera } = this.props;
-    const options = { quality: 0.5, base64: true };
+    onTakeCamera();
+  }
+
+  takePicture = async (camera: RNCamera) => {
+    const { onTakeCamera } = this.props;
+    const options: TakePictureOptions = {
+      quality: 0.5,
+      base64: true
+    }
     try {
       const data = await camera.takePictureAsync(options);
       onTakeCamera(data.uri);
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 }
 
 const styles = StyleSheet.create({
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   capture: {
     flex: 0,
@@ -87,6 +86,14 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingHorizontal: 20,
     alignSelf: 'center',
-    margin: 20,
+    margin: 20
   },
-});
+  titlePhoto: {
+    fontSize: 14
+  },
+  pendingView: {
+    backgroundColor: 'lightgreen',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

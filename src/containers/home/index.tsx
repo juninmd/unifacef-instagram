@@ -1,9 +1,9 @@
+import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native';
 import { Avatar, Button, Card, Divider, Layout, Text } from '@ui-kitten/components';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import React, { Component, } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import { CameraApp } from '../../components/camera.component';
+import { Camera } from '../../components/camera.component';
 import HomeStore from '../../stores/home.store';
 
 interface Props {
@@ -22,22 +22,32 @@ export default class Home extends Component<Props> {
 
   render() {
 
-    const { posts, photoReady, toogleStatus } = this.props.homeStore;
+    const { posts, photoReady, toogleStatus, addPost } = this.props.homeStore;
 
-    const uploadPhoto = (uri: string) => {
-      const { addPost } = this.props.homeStore;
-      addPost(uri);
+    const uploadPhoto = (uri?: string) => {
+      if (uri) {
+        Alert.alert(
+          "Confirmação",
+          "Deseja realmente postar?",
+          [
+            {
+              text: "Cancelar",
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => addPost(uri) }
+          ],
+          { cancelable: false }
+        );
+      }
       toogleStatus(false);
     }
 
     return (
       <Layout style={{ flex: 1 }}>
         <ScrollView>
-          <CameraApp status={photoReady} onTakeCamera={(uri) => uploadPhoto(uri)} />
-
-          {photoReady == false && <Button onPress={() => toogleStatus(true)}>Postar</Button>}
-
-          {photoReady == false && posts.map((post, index) => (
+          <Camera status={photoReady} onTakeCamera={(uri) => uploadPhoto(uri)} />
+          {photoReady === false && <Button onPress={() => toogleStatus(true)}>Postar</Button>}
+          {photoReady === false && posts.map((post, index) => (
             <Card key={index} style={styles.card}>
               <View style={styles.header}>
                 <Avatar
@@ -51,26 +61,36 @@ export default class Home extends Component<Props> {
               <View style={styles.footer}>
                 <Text style={styles.title}>{post.description}</Text>
               </View>
-            </Card>))
-          }
+            </Card>))}
         </ScrollView>
-      </Layout >);
+      </Layout>);
   }
 }
+
 const styles = StyleSheet.create({
-  card: { padding: 1, margin: 4, backgroundColor: 'black' },
+  card: {
+    padding: 1,
+    margin: 4,
+    backgroundColor: 'black'
+  },
   header: {
     padding: 3,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   scrollView: {
     backgroundColor: 'black',
     color: 'white',
     marginHorizontal: 20,
   },
-  avatar: { marginRight: 5 },
-  picture: { width: 'auto', minHeight: 200, maxHeight: 500 },
+  avatar: {
+    marginRight: 5
+  },
+  picture: {
+    width: 'auto',
+    minHeight: 200,
+    maxHeight: 500
+  },
   footer: {
     margin: 4,
     padding: 4,
@@ -78,6 +98,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   title: {
-    fontSize: 15,
-  },
-});
+    fontSize: 15
+  }
+})
